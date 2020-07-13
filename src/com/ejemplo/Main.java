@@ -21,14 +21,12 @@ public class Main {
         // Decir quien ha ganado, finalizar partida y preguntar si quieres echar otra partida.
         // Si el jugador no se planta, repetir el proceso
 
-        boolean finDelJuego = false;
         Jugador jugador = new Jugador("Carlos");
         Jugador banca = new Jugador("Banca");
 
         do {
             iniciarPartida(jugador, banca);
         } while (!salirDelJuego);
-
 
     }
 
@@ -37,20 +35,31 @@ public class Main {
         boolean partidaFinalizada = false;
         do {
             // El usuario recibe una carta.
-
+            jugador.addCarta(getCarta());
             // Calcular si has perdido - Te has pasado de 21
             if (jugador.haPerdido()){
-                // finalizar partida y preguntar si quieres echar otra partida.
+                System.out.println("Has perdido");
+                // preguntar si quieres echar otra partida.
+                preguntarSiQuiereSeguirJugando(jugador, banca);
             }
+
             // La banca pide carta si sus cartas no suman mas de 17
+            if (!banca.esElSumatorioMayorQue17()){
+                System.out.println("La banca roba carta");
+                banca.addCarta(getCarta());
+            } else {
+                System.out.println("La banca espera");
+            }
 
             // Calcular si la banca ha perdido - Se ha pasado de 21
-
             if (banca.haPerdido()){
+                System.out.println("El jugador ha ganado");
                 // finalizar partida y preguntar si quieres echar otra partida.
+                preguntarSiQuiereSeguirJugando(jugador, banca);
             }
 
-            if (sePlanta()){
+            if (preguntarSiQuierePlantarse()){
+
                 // La banca pide cartas hasta que gane o pierda.
                 // finalizar partida y preguntar si quieres echar otra partida.
             }
@@ -60,15 +69,35 @@ public class Main {
     }
 
 
-    private static boolean sePlanta(){
-        // TODO preguntar al usuario en bucle si quiere o no otra carta. Las opciones validas on 1 para si y 2 para no
-        return false;
+    private static void preguntarSiQuiereSeguirJugando(Jugador jugador, Jugador banca){
+        if (pedirEleccionAlUsuario("Introduce 1 para seguir jugando, 2 para salir")){
+            jugador.reiniciarCartas();
+            banca.reiniciarCartas();
+        } else {
+            System.exit(0);
+        }
+    }
+
+    private static boolean preguntarSiQuierePlantarse(){
+        if (pedirEleccionAlUsuario("Introduce 1 para seguir jugando, 2 para plantarse")){
+            return false;
+        } else {
+            return true;
+        }
     }
 
 
-    private static boolean quiereRepetirPartida(){
-        // TODO preguntar al usuario en bucle si quiere o no repetir. Las opciones validas on 1 para si y 2 para no
-        return false;
+    private static boolean pedirEleccionAlUsuario(String mensaje){
+        int eleccionDelUsuario;
+        do {
+            System.out.println(mensaje);
+            eleccionDelUsuario = readIntFromKeyboard();
+        } while (eleccionDelUsuario == 1 || eleccionDelUsuario == 2);
+        if (eleccionDelUsuario == 1){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private static boolean calcular(){

@@ -21,16 +21,23 @@ public class Jugador {
     }
 
     public int getSumatorioCartas(){
-        // TODO
-        return 0;
+        int resultado = 0;
+        for (Integer carta : cartasObtenidas){
+            resultado = resultado + carta;
+        }
+        return resultado;
     }
 
-    public void reiniciarPartida(){
+    public void reiniciarCartas(){
         cartasObtenidas.clear();
     }
 
     public boolean haPerdido(){
-        // TODO
-        return false;
+        return (getSumatorioCartas() > 21);
     }
+
+    public boolean esElSumatorioMayorQue17(){
+        return (getSumatorioCartas() > 17);
+    }
+
 }
